@@ -53,34 +53,32 @@ This list is not complete and may contain features that won't ever make it into 
 
 ## Architecture
 
-Kimura's design is constantly in a state of flux, but here's some ideas of how
-it's architected.
+Kimura's architecture is constantly in a state of flux, but here's some design related info.
 
-	main()
-	- initialize the setProcessTitle() function
-	- initialize signals
-	- parse command line args
-	- load server config from file
-	  - read from -c flag, ~/.kimura.conf, /etc/kimura/kimura.conf, or /etc/kimura.conf
-	  - parse json into config registry
-	    - path/key => value
-	- load plugins
-	  - if -t, plugins test their config settings, exit
-	- if run as daemon, daemonize
-	- if enable priv sep, separate, spawn child
-	- child process
-	  - init plugins
-	    - bind sockets
-	  - switch user/group
-	  - spawn threads
-	    - enter plugin event loop
-	      - process events
-	- parent process
-	  - enter priv sep event loop
-	    - process commands
-	  - unload plugins
-	  - cleanup
-	  - exit
+* initialize the setProcessTitle() function
+* initialize signals
+* parse command line args
+* load server config from file
+  - read from -c flag, ~/.kimura.conf, /etc/kimura/kimura.conf, or /etc/kimura.conf
+  - parse json into config registry
+    - path/key => value
+* load plugins
+  - if -t, plugins test their config settings, exit
+* if run as daemon, daemonize
+* if enable priv sep, separate, spawn child
+* child process
+  - init plugins
+    - bind sockets
+  - switch user/group
+  - spawn threads
+    - enter plugin event loop
+      - process events
+* parent process
+  - enter priv sep event loop
+    - process commands
+  - unload plugins
+  - cleanup
+  - exit
 
 ## Command Line Arguments
 
