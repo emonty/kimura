@@ -1,3 +1,8 @@
+// Copyright 2007-2010 Baptiste Lepilleur
+// Distributed under MIT license, or public domain if desired and
+// recognized in your jurisdiction.
+// See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
+
 #ifndef CPPTL_JSON_READER_H_INCLUDED
 # define CPPTL_JSON_READER_H_INCLUDED
 
@@ -119,8 +124,8 @@ namespace Json {
       bool readString();
       void readNumber();
       bool readValue();
-      bool readObject( /*Token &token*/ );
-      bool readArray( /*Token &token*/ );
+      bool readObject( Token &token );
+      bool readArray( Token &token );
       bool decodeNumber( Token &token );
       bool decodeString( Token &token );
       bool decodeString( Token &token, std::string &decoded );

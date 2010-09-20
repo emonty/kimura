@@ -1,3 +1,8 @@
+// Copyright 2007-2010 Baptiste Lepilleur
+// Distributed under MIT license, or public domain if desired and
+// recognized in your jurisdiction.
+// See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
+
 #ifndef JSON_WRITER_H_INCLUDED
 # define JSON_WRITER_H_INCLUDED
 
@@ -158,8 +163,8 @@ namespace Json {
       bool addChildValues_;
    };
 
-   std::string JSON_API valueToString( Value::Int value );
-   std::string JSON_API valueToString( Value::UInt value );
+   std::string JSON_API valueToString( Int value );
+   std::string JSON_API valueToString( UInt value );
    std::string JSON_API valueToString( double value );
    std::string JSON_API valueToString( bool value );
    std::string JSON_API valueToQuotedString( const char *value );

@@ -1,3 +1,8 @@
+// Copyright 2007-2010 Baptiste Lepilleur
+// Distributed under MIT license, or public domain if desired and
+// recognized in your jurisdiction.
+// See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
+
 #ifndef CPPTL_JSON_H_INCLUDED
 # define CPPTL_JSON_H_INCLUDED
 
@@ -118,11 +123,11 @@ namespace Json {
 # endif
    public:
       typedef std::vector<std::string> Members;
-      typedef int Int;
-      typedef unsigned int UInt;
       typedef ValueIterator iterator;
       typedef ValueConstIterator const_iterator;
-      typedef UInt ArrayIndex;
+      typedef Json::UInt UInt;
+      typedef Json::Int Int;
+      typedef Json::ArrayIndex ArrayIndex;
 
       static const Value null;
       static const Int minInt;
@@ -141,20 +146,20 @@ namespace Json {
             duplicate,
             duplicateOnCopy
          };
-         CZString( int idx );
+         CZString( ArrayIndex index );
          CZString( const char *cstr, DuplicationPolicy allocate );
          CZString( const CZString &other );
          ~CZString();
          CZString &operator =( const CZString &other );
          bool operator<( const CZString &other ) const;
          bool operator==( const CZString &other ) const;
-         int index() const;
+         ArrayIndex index() const;
          const char *c_str() const;
          bool isStaticString() const;
       private:
          void swap( CZString &other );
          const char *cstr_;
-         int index_;
+         ArrayIndex index_;
       };
 
    public:
@@ -182,11 +187,16 @@ namespace Json {
 	Json::Value obj_value(Json::objectValue); // {}
 	\endcode
       */
-      Value( ValueType vtype = nullValue );
+      Value( ValueType type = nullValue );
+#if !defined(JSON_NO_INT64)
+      Value( int value );
+      Value( ArrayIndex value );
+#endif // if !defined(JSON_NO_INT64)
       Value( Int value );
       Value( UInt value );
       Value( double value );
       Value( const char *value );
+      Value( const char *beginValue, const char *endValue );
       /** \brief Constructs a value from a static string.
 
        * Like other value string constructor but do not duplicate the string for
@@ -222,7 +232,7 @@ namespace Json {
       bool operator ==( const Value &other ) const;
       bool operator !=( const Value &other ) const;
 
-      //int compare( const Value &other );
+      int compare( const Value &other );
 
       const char *asCString() const;
       std::string asString() const;
@@ -248,7 +258,7 @@ namespace Json {
       bool isConvertibleTo( ValueType other ) const;
 
       /// Number of values in array or object
-      UInt size() const;
+      ArrayIndex size() const;
 
       /// \brief Return true if empty array, empty object, or null;
       /// otherwise, false.
@@ -267,24 +277,24 @@ namespace Json {
       /// May only be called on nullValue or arrayValue.
       /// \pre type() is arrayValue or nullValue
       /// \post type() is arrayValue
-      void resize( UInt size );
+      void resize( ArrayIndex size );
 
       /// Access an array element (zero based index ).
       /// If the array contains less than index element, then null value are inserted
       /// in the array so that its size is index+1.
       /// (You may need to say 'value[0u]' to get your compiler to distinguish
       ///  this from the operator[] which takes a string.)
-      Value &operator[]( UInt index );
+      Value &operator[]( ArrayIndex index );
       /// Access an array element (zero based index )
       /// (You may need to say 'value[0u]' to get your compiler to distinguish
       ///  this from the operator[] which takes a string.)
-      const Value &operator[]( UInt index ) const;
+      const Value &operator[]( ArrayIndex index ) const;
       /// If the array contains at least index+1 elements, returns the element value, 
       /// otherwise returns defaultValue.
-      Value get( UInt index, 
+      Value get( ArrayIndex index, 
                  const Value &defaultValue ) const;
       /// Return true if index < size().
-      bool isValidIndex( UInt index ) const;
+      bool isValidIndex( ArrayIndex index ) const;
       /// \brief Append value to array at the end.
       ///
       /// Equivalent to jsonvalue[jsonvalue.size()] = value;
@@ -437,8 +447,7 @@ namespace Json {
 # endif
       } value_;
       ValueType type_ : 8;
-      //int allocated_ : 1;     // Notes: if declared as bool, bitfield is useless.
-	  bool allocated_;
+      int allocated_ : 1;     // Notes: if declared as bool, bitfield is useless.
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
       unsigned int itemIsUsed_ : 1;      // used by the ValueInternalMap container.
       int memberNameIsStatic_ : 1;       // used by the ValueInternalMap container.
@@ -455,7 +464,7 @@ namespace Json {
       friend class Path;
 
       PathArgument();
-      PathArgument( Value::UInt index );
+      PathArgument( ArrayIndex index );
       PathArgument( const char *key );
       PathArgument( const std::string &key );
 
@@ -467,7 +476,7 @@ namespace Json {
          kindKey
       };
       std::string key_;
-      Value::UInt index_;
+      ArrayIndex index_;
       Kind kind_;
    };
 
@@ -504,36 +513,17 @@ namespace Json {
 
       void makePath( const std::string &path,
                      const InArgs &in );
-      void addPathInArg( /*const std::string &path,*/
+      void addPathInArg( const std::string &path, 
                          const InArgs &in, 
                          InArgs::const_iterator &itInArg, 
                          PathArgument::Kind kind );
-      void invalidPath( /*const std::string &path, 
-                        int location*/ );
+      void invalidPath( const std::string &path, 
+                        int location );
 
       Args args_;
    };
 
-   /** \brief Allocator to customize member name and string value memory management done by Value.
-    *
-    * - makeMemberName() and releaseMemberName() are called to respectively duplicate and
-    *   free an Json::objectValue member name.
-    * - duplicateStringValue() and releaseStringValue() are called similarly to
-    *   duplicate and free a Json::stringValue value.
-    */
-   class ValueAllocator
-   {
-   public:
-      enum { unknown = (unsigned)-1 };
 
-      virtual ~ValueAllocator();
-
-      virtual char *makeMemberName( const char *memberName ) = 0;
-      virtual void releaseMemberName( char *memberName ) = 0;
-      virtual char *duplicateStringValue( const char *value, 
-                                          unsigned int length = unknown ) = 0;
-      virtual void releaseStringValue( char *value ) = 0;
-   };
 
 #ifdef JSON_VALUE_USE_INTERNAL_MAP
    /** \brief Allocator to customize Value internal map.
@@ -786,7 +776,7 @@ namespace Json {
       PageIndex pageCount_;
    };
 
-   /** \brief Allocator to customize Value internal array.
+   /** \brief Experimental: do not use. Allocator to customize Value internal array.
     * Below is an example of a simple implementation (actual implementation use
     * memory pool).
       \code
@@ -874,7 +864,7 @@ public: // overridden from ValueArrayAllocator
 #endif // #ifdef JSON_VALUE_USE_INTERNAL_MAP
 
 
-   /** \brief Experimental and untested: base class for Value iterators.
+   /** \brief base class for Value iterators.
     *
     */
    class ValueIteratorBase
@@ -911,7 +901,7 @@ public: // overridden from ValueArrayAllocator
       Value key() const;
 
       /// Return the index of the referenced Value. -1 if it is not an arrayValue.
-      Value::UInt index() const;
+      UInt index() const;
 
       /// Return the member name of the referenced Value. "" if it is not an objectValue.
       const char *memberName() const;
@@ -944,7 +934,7 @@ public: // overridden from ValueArrayAllocator
 #endif
    };
 
-   /** \brief Experimental and untested: const iterator for object and array value.
+   /** \brief const iterator for object and array value.
     *
     */
    class ValueConstIterator : public ValueIteratorBase
@@ -1003,7 +993,7 @@ public: // overridden from ValueArrayAllocator
    };
 
 
-   /** \brief Experimental and untested: iterator for object and array value.
+   /** \brief Iterator for object and array value.
     */
    class ValueIterator : public ValueIteratorBase
    {
