@@ -24,8 +24,6 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-SUBDIRS = src/kimura
-
-ACLOCAL_AMFLAGS= -I m4
-
-#include config/pandora-plugin.am
+sbin_PROGRAMS = kimura
+kimura_SOURCES = \
+	Kimura.cpp
