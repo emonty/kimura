@@ -29,6 +29,9 @@
 #ifndef __KIMURA_H__
 #define __KIMURA_H__
 
+#define KIMURA_COPYRIGHT_START_YEAR 2009
+#define KIMURA_WEBSITE "http://github.com/cb1kenobi/kimura"
+
 // __DATE__ format macros from http://bytes.com/forum/thread215378.html
 #define YEAR _YEAR(__DATE__)
 #define _YEAR(d) ((((d[7] - '0') * 10 + (d[8] - '0')) * 10 + (d[9] - '0')) * 10 + (d[10] - '0'))

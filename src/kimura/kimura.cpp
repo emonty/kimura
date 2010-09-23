@@ -29,7 +29,8 @@
 #include <stdlib.h>
 #include <config.h>
 #include <iostream>
-#include <kimura/Kimura.h>
+#include <kimura/kimura.h>
+/*
 #include <kimura/Exception.h>
 #include <kimura/CmdLineArgs/Parser.h>
 #include <kimura/Process/Daemonize.h>
@@ -37,14 +38,15 @@
 #include <kimura/Process/SetTitle.h>
 #include <kimura/ServerConfig.h>
 #include <kimura/signals.h>
-
+*/
 using namespace kimura;
 
 int version();
-int help(CmdLineArgs::Parser& args, Exception* ex);
+//int help(CmdLineArgs::Parser& args, Exception* ex);
 
 int main(int argc, char** argv) {
-	try {
+	std::cout << "Hello world!\n";
+/*	try {
 		CmdLineArgs::Parser args;
 		ServerConfig config;
 	
@@ -109,18 +111,18 @@ int main(int argc, char** argv) {
 			std::cout << "Worker " << (i+1) << "/10 is doing work!\n";
 			::sleep(1);
 		}
-		*/
+		* /
 	} catch (std::exception &e) {
 		std::cerr << e.what();
 		// TODO: shutdown
 		return EXIT_FAILURE;
 	}
-	
+	*/
 	return EXIT_SUCCESS;
 }
 
 int version() {
-	std::cout << KIMURA_APP_TITLE " v" KIMURA_RELEASE_VERSION "\n"
+	std::cout << "Kimura Server v" KIMURA_RELEASE_VERSION "\n"
 		"   \"" KIMURA_VC_BRANCH "\" branch, rev " << KIMURA_VC_REVNO << ", compiled " << MONTH << '/' << DAY << '/' << YEAR << ' ' << __TIME__ << "\n\n"
 		"Copyright (c) " << KIMURA_COPYRIGHT_START_YEAR;
 	
@@ -132,7 +134,7 @@ int version() {
 	
 	return EXIT_SUCCESS;
 }
-
+/*
 int help(CmdLineArgs::Parser& args, Exception* ex) {
 	version();
 	
@@ -140,7 +142,7 @@ int help(CmdLineArgs::Parser& args, Exception* ex) {
 #ifdef DEBUG
 		std::cout << "\n " << ex->what() << "\n";
 #else
-		std::cout << "\n " << /*ExceptionType::label[ex->getExceptionType()] << */ "Exception: " << ex->getMessage() << "\n";
+		std::cout << "\n " << / *ExceptionType::label[ex->getExceptionType()] << * / "Exception: " << ex->getMessage() << "\n";
 #endif
 	}
 	
@@ -148,3 +150,4 @@ int help(CmdLineArgs::Parser& args, Exception* ex) {
 	
 	return EXIT_SUCCESS;
 }
+*/
