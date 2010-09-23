@@ -31,7 +31,6 @@ AC_INIT([kimura], [RELEASE_VERSION], [http://github.com/cb1kenobi/kimura])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([src/kimura/kimura.cpp])
 AC_CONFIG_MACRO_DIR([m4])
-AC_PREFIX_DEFAULT([/usr])
 
 PANDORA_CANONICAL_TARGET(less-warnings, warnings-always-on, require-cxx, force-gcc42, skip-visibility, version-from-vc)
 
