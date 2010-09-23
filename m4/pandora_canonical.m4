@@ -260,6 +260,7 @@ AC_DEFUN([PANDORA_CANONICAL_TARGET],[
     ])
   ])
   m4_if(m4_substr(m4_esyscmd(test -d src && echo 0),0,1),0,[
+    AM_CPPFLAGS="-I\$(top_srcdir) -I\$(top_builddir) ${AM_CPPFLAGS}"
     AM_CPPFLAGS="-I\$(top_srcdir)/src -I\$(top_builddir)/src ${AM_CPPFLAGS}"
   ],[
     AM_CPPFLAGS="-I\$(top_srcdir) -I\$(top_builddir) ${AM_CPPFLAGS}"
