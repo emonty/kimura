@@ -26,4 +26,4 @@
 
 sbin_PROGRAMS = kimura
 kimura_SOURCES = \
-	Kimura.cpp
+	kimura.cpp
