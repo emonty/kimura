@@ -26,8 +26,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
 #include <config.h>
+#include <stdlib.h>
 #include <iostream>
 #include <kimura/kimura.h>
 /*
@@ -39,12 +39,12 @@
 #include <kimura/ServerConfig.h>
 #include <kimura/signals.h>
 */
-using namespace kimura;
+//using namespace kimura;
 
 int version();
 //int help(CmdLineArgs::Parser& args, Exception* ex);
 
-int main(int argc, char** argv) {
+int main(/*int argc, char** argv*/) {
 	std::cout << "Hello world!\n";
 /*	try {
 		CmdLineArgs::Parser args;
@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
 		// connect to peers
 		// listen for connections
 	
-		/*
+		/ *
 		std::cout << "Hi from the worker server! pid=" << ::getpid() << "\n";
 		for (int i=0; i<10; i++) {
 			std::cout << "Worker " << (i+1) << "/10 is doing work!\n";
