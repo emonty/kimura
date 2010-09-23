@@ -54,13 +54,21 @@ AC_DEFUN([PANDORA_BUILDING_FROM_VC],[
         PANDORA_VC_REVID=`bzr log -r-1 --show-ids | grep revision-id | cut -f2 -d' ' | head -1`
         PANDORA_VC_BRANCH=`bzr nick`
       fi
+    elif text "${pandora_building_from_git}" = "yes"; then
+      echo "# Grabbing changelog and version information from git"
+      PANDORA_GIT_REVNO=`git --no-pager log --max-count=1 | cut -f2 -d' ' | head -1`
+      if test "x$PANDORA_GIT_REVNO" != "x${PANDORA_VC_REVNO}" ; then
+        PANDORA_VC_REVNO="${PANDORA_GIT_REVNO}"
+        PANDORA_VC_REVID="${PANDORA_GIT_REVNO}"
+        PANDORA_VC_BRANCH=`git branch | grep -Ei "\* (.*)" | cut -f2 -d' '`
+      fi
     fi
 
     if ! test -d config ; then
       mkdir -p config
     fi
 
-    if test "${pandora_building_from_bzr}" = "yes" -o ! -f config/pandora_vc_revinfo ; then 
+    if test "${pandora_building_from_bzr}" = "yes" -o "${pandora_building_from_git}" = "yes" -o ! -f config/pandora_vc_revinfo ; then 
       cat > config/pandora_vc_revinfo.tmp <<EOF
 PANDORA_VC_REVNO=${PANDORA_VC_REVNO}
 PANDORA_VC_REVID=${PANDORA_VC_REVID}

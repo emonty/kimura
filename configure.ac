@@ -75,7 +75,7 @@ PANDORA_PLUGINS
 #----------------------------------------------------------------------------
 # Makefiles to build
 #----------------------------------------------------------------------------
-AC_CONFIG_FILES([Makefile gnulib/Makefile src/kimura/Makefile])
+AC_CONFIG_FILES([Makefile src/kimura/Makefile])
 
 #----------------------------------------------------------------------------
 # create the configure file
